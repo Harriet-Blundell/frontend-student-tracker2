@@ -5,6 +5,7 @@ import SingleStudent from './singleStudent';
 import { Link } from '@reach/router';
 import AddNewStudent from './addNewStudent';
 import SortBy from './sortBy';
+import FilterByBlock from './FilterByBlock';
 import Order from './order';
 
 class AllStudents extends Component {
@@ -72,6 +73,16 @@ class AllStudents extends Component {
     });
   };
 
+  blockRequest = value => {
+    return Axios.get(
+      `https://nc-student-tracker.herokuapp.com/api/students?block=${value}`
+    ).then(res => {
+      this.setState({
+        allStudents: res.data.students
+      });
+    });
+  };
+
   render() {
     const { allStudents } = this.state;
     return (
@@ -80,6 +91,8 @@ class AllStudents extends Component {
         <AddNewStudent postNewStudent={this.postNewStudent} />
         <br />
         <SortBy handleChange={this.handleChange} />
+        <br />
+        <FilterByBlock blockRequest={this.blockRequest} />
         <br />
         <Order orderRequest={this.orderRequest} />
         <Router>

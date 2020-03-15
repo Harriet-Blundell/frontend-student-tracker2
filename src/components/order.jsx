@@ -25,8 +25,8 @@ class Order extends Component {
               <option selected disabled>
                 Choose
               </option>
-              <option>asc</option>
-              <option>desc</option>
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
             </select>
           </label>
         </form>

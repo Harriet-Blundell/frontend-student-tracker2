@@ -10,8 +10,8 @@ function SortBy(props) {
             <option selected disabled>
               Choose
             </option>
-            <option name="name">name</option>
-            <option name="startingCohort">startingCohort</option>
+            <option value="name">Name</option>
+            <option value="startingCohort">Starting Cohort</option>
           </select>
         </label>
       </form>
