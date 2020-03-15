@@ -5,13 +5,15 @@ import SingleStudent from './singleStudent';
 import { Link } from '@reach/router';
 import AddNewStudent from './addNewStudent';
 import SortBy from './sortBy';
-import FilterByBlock from './FilterByBlock';
 import Order from './order';
+import FilterByBlock from './FilterByBlock';
+import FilterGraduated from './FilterGraduated';
 
 class AllStudents extends Component {
   state = {
     allStudents: [],
-    sort_by: ''
+    sort_by: '',
+    graduated: ''
   };
 
   fetchAllStudents = () => {
@@ -60,6 +62,8 @@ class AllStudents extends Component {
   componentDidUpdate(prevProp, prevState) {
     if (prevState.sort_by !== this.state.sort_by) {
       this.sortByRequest();
+    } else if (prevState.graduated !== this.state.graduated) {
+      this.graduatedResult();
     }
   }
 
@@ -83,6 +87,20 @@ class AllStudents extends Component {
     });
   };
 
+  graduatedResult = () => {
+    return Axios.get(
+      `https://nc-student-tracker.herokuapp.com/api/students?graduated=${this.state.graduated}`
+    ).then(res => {
+      this.setState({
+        allStudents: res.data.students
+      });
+    });
+  };
+
+  handleGraduateChange = event => {
+    this.setState({ graduated: event.target.value });
+  };
+
   render() {
     const { allStudents } = this.state;
     return (
@@ -91,10 +109,11 @@ class AllStudents extends Component {
         <AddNewStudent postNewStudent={this.postNewStudent} />
         <br />
         <SortBy handleChange={this.handleChange} />
+        <Order orderRequest={this.orderRequest} />
         <br />
         <FilterByBlock blockRequest={this.blockRequest} />
         <br />
-        <Order orderRequest={this.orderRequest} />
+        <FilterGraduated handleGraduateChange={this.handleGraduateChange} />
         <Router>
           <SingleStudent path="/:student_id" />
         </Router>

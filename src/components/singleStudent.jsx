@@ -1,9 +1,11 @@
 import React from 'react';
 import Axios from 'axios';
+import UpdateBlock from './UpdateBlock';
 
 class SingleStudent extends React.Component {
   state = {
     student: {},
+    progress: '',
     isLoading: true
   };
 
@@ -17,13 +19,29 @@ class SingleStudent extends React.Component {
       .catch(err => console.dir(err));
   };
 
+  updateBlockHistory = () => {
+    return Axios.patch(
+      `https://nc-student-tracker.herokuapp.com/api/students/${this.props.student_id}?progress=${this.state.progress}`
+    ).then(res => {
+      this.setState({
+        student: res.data.student
+      });
+    });
+  };
+
   componentDidMount() {
     this.fetchStudent();
   }
 
+  handleChange = event => {
+    this.setState({ progress: event.target.value });
+  };
+
   componentDidUpdate(prevProp, prevState) {
     if (prevProp.student_id !== this.props.student_id) {
       this.fetchStudent();
+    } else if (prevState.progress !== this.state.progress) {
+      this.updateBlockHistory();
     }
   }
 
@@ -49,6 +67,7 @@ class SingleStudent extends React.Component {
             );
           })}
         </ul>
+        <UpdateBlock handleChange={this.handleChange} />
       </div>
     );
   }
